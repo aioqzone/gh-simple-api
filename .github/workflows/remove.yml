@@ -9,13 +9,13 @@ on:
     inputs:
       project:
         type: string
-        description: which project to remove files from.
+        description: project name
       files:
         type: string
-        description: files to remove.
+        description: filenames
       index-branch:
         type: string
-        description: Which branch to store the index htmls, default as `idx-pages`.
+        description: index htmls hosting branch
         required: false
         default: idx-pages
 

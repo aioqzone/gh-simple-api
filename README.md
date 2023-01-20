@@ -1,13 +1,13 @@
 # gh-simple-api
 
-Implement [PEP 503][pep-0503] simple api with GitHub release and GitHub Page.
+Implement [PEP 503][pep-0503] simple api with GitHub Page.
 
 ## Setup
 
-1. You should create your own repository and choose this repo as the template.
-2. Create an orphan `idx-pages` branch. It is used to save index htmls.
-3. Create a `gh-pages` branch as source of the index site. You can customize your site like other `JekyII` GitHub Pages.
-4. In repo settings, switch GitHub Page source to `GitHub Action`. GitHub Actions will fetch built index htmls to `/simple` dir, then build your site from `gh-pages` source.
+1. You should create your own repository and choose this repo as the template. Select _include all branches_, so that you'll get `master`, `idx-pages` and `gh-pages` branch.
+2. In repo's GitHub Page settings, switch GitHub Page source to `GitHub Action`.
+3. You can customize your site by updating `gh-pages` branch just like other `JekyII` GitHub Pages.
+4. Once you edit `idx-pages`(by calling the following workflows) or edit `gh-pages`, our build workflow will fetch built index htmls to `/simple` dir, then build your site from `gh-pages` source.
 
 ## Usage
 
@@ -15,6 +15,10 @@ Implement [PEP 503][pep-0503] simple api with GitHub release and GitHub Page.
 
 `release.yml` will upload the given files to GitHub release of the given repository and return urls
 including a `SHA256` hash in their url fragments.
+
+<detail>
+
+<summary>Inputs, Outputs and Example</summary>
 
 - Inputs:
   - tag: Release tag.
@@ -34,10 +38,15 @@ including a `SHA256` hash in their url fragments.
 - run: echo ${{ steps.upload.outputs.urls }}
 # https://github.com/aioqzone/project1/releases/download/project1/package1-0.1.0-cp3-none.whl#sha256=111111 https://github.com/aioqzone/project1/releases/download/project1/package1-0.1.0.tar.gz#sha256=2222222
 ```
+</detail>
 
 ### add.yml
 
 `add.yml` will add urls and the corresponding files to the given project and deploy the index to GitHub Page.
+
+<detail>
+
+<summary>Inputs, Outputs and Example</summary>
 
 - Inputs:
   - project: Which project to add or update.
@@ -52,12 +61,17 @@ including a `SHA256` hash in their url fragments.
     urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
     repo: aioqzone/aioqzone-simple-index
 ```
+</detail>
 
 ### remove.yml
 
 `remove.yml` will remove the files in the given project and deploy the index to GitHub Page.
 
 > **Note** This workflow should be triggered manually.
+
+<detail>
+
+<summary>Inputs, Outputs and Example</summary>
 
 - Inputs:
   - project: Which project to remove files from.
@@ -72,6 +86,8 @@ including a `SHA256` hash in their url fragments.
     files: package1-0.1.0-cp3-none.whl package1-0.1.0.tar.gz
     repo: aioqzone/aioqzone-simple-index
 ```
+
+</detail>
 
 
 [pep-0503]: https://peps.python.org/pep-0503/
