@@ -42,7 +42,7 @@ jobs:
                   hash_urls="${hash_urls}${url}#sha256=${hash} "
               fi
           done
-          echo "urls=${hash_ruls}" >> $GITHUB_OUTPUT
+          echo "urls=${hash_urls}" >> $GITHUB_OUTPUT
 
   add:
     uses: ./.github/workflows/add.yml
