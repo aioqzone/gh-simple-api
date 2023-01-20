@@ -48,7 +48,7 @@ jobs:
           echo "urls=${hash_ruls}" >> $GITHUB_OUTPUT
 
   add:
-    uses: .github/workflows/add.yml
+    uses: ./.github/workflows/add.yml
     with:
       project: ${{ inputs.project }}
       urls: ${{ needs.hash.outputs.urls }}
