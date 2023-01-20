@@ -42,6 +42,7 @@ jobs:
         run: |
           cd ${{ env.idx-checkout-path }}
 
+          proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
           proj_html="simple/${proj}/index.html"
           if [ ! -f $proj_html ]; then exit; fi
 

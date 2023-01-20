@@ -50,19 +50,21 @@ jobs:
         env:
           proj: ${{ inputs.project }}
           urls: ${{ inputs.urls }}
-          EMPTY_HTML: "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>"
         run: |
           cd ${{ env.idx-checkout-path }}
           mkdir -p simple
 
           if [ ! -f simple/index.html ]; then
-              echo -e ${EMPTY_HTML} > simple/index.html
+              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > simple/index.html
           fi
+
+          proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
+          echo "::debug::project=${proj}"
 
           if [[ $(grep ">${proj}<" simple/index.html) == "" ]]; then
               sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" simple/index.html
               mkdir -p simple/${proj}
-              echo -e ${EMPTY_HTML} > simple/${proj}/index.html
+              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > simple/${proj}/index.html
           fi
 
           for url in $urls; do
