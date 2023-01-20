@@ -1,0 +1,65 @@
+name: Upload to GitHub Release
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        description: which project to add or update.
+      files:
+        type: string
+        description: assets files.
+          To define a display label for an asset, append text starting with '#' after the file name.
+      repo:
+        type: string
+        description: Repository name with owner. For example, aioqzone/aioqzone-simple-index
+        default: ${{ github.repository }}
+    outputs:
+      urls:
+        description: the urls of the uploaded files, with sha256 as url fragment.
+        value: ${{ jobs.upload.outputs.urls }}
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    outputs:
+      urls: ${{ steps.query.hash.urls }}
+    steps:
+      - name: upload
+        run: |
+          gh release -R ${{ inputs.repo }} view ${{ inputs.project }} --json url > /dev/null
+          if [ $? ]; then
+            gh release -R ${{ inputs.repo }} upload --clobber ${{ inputs.project }} ${{ inputs.files }}
+          else
+            gh release -R ${{ inputs.repo }} create ${{ inputs.project }} ${{ inputs.files }}
+          fi
+
+      - name: query urls
+        id: query
+        run: |
+          sharp_list="#"
+          for file in $(ls ${{ inputs.files }}); do
+              sharp_list="$sharp_list$(basename $file)#"
+          done
+
+          filter=".assets[] | select( \"#\" + .name + \"#\" | inside(\"$sharp_list\") ) | .url"
+          urls=$(gh release -R ${{ inputs.repo }} view ${{ inputs.project }} --json assets -q "$filter")
+
+          echo "urls=$urls" >> $GITHUB_OUTPUT
+
+      - name: calculate hash
+        id: hash
+        env:
+          urls: ${{ steps.query.outputs.urls }}
+        run: |
+          hash_urls=""
+          for url in $urls; do
+            for file in $(ls ${{ inputs.files }}); do
+              if [ $(basename $url) = $(basename $file) ]; then
+                  hash=$(sha256sum $file)
+                  hash=(${hash// / }[0])
+                  hash_urls="$hash_urls$url#sha256=$hash "
+              fi
+            done
+          done
+          echo "urls=$hash_urls" >> $GITHUB_OUTPUT

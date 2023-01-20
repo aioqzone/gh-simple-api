@@ -1,0 +1,95 @@
+name: Add Assets to Index
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        description: which project to add or update.
+      urls:
+        type: string
+        description: asset urls, optional, default as empty string.
+        default: ""
+      repo:
+        type: string
+        description: Repository name with owner. For example, aioqzone/aioqzone-simple-index
+        default: ${{ github.repository }}
+    secrets:
+      REPO_TOKEN:
+        required: false
+        description: if you want to checkout a different repository
+          that is private you will need to provide your own PAT.
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout script branch
+        uses: actions/checkout@v3
+
+      - name: checkout gh-page branch
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.repo }}
+          ref: gh-page
+          token: ${{ secrets.REPO_TOKEN || github.token }}
+
+      - name: update simple index
+        env:
+          proj: ${{ inputs.project }}
+          urls: ${{ inputs.urls }}
+          EMPTY_HTML: "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>"
+        run: |
+          cd gh-page
+          mkdir -p simple
+
+          if [ ! -f simple/index.html ]; then
+              echo -e ${EMPTY_HTML} > simple/index.html
+          fi
+
+          if [[ $(grep ">${proj}<" simple/index.html) == "" ]]; then
+              sed -i "/<\/body>/ i \    <a href=\"\/${proj}\/\">${proj}<\/a>" simple/index.html
+              mkdir -p ${proj}
+              echo -e ${EMPTY_HTML} > simple/${proj}/index.html
+          fi
+
+          for url in $urls; do
+              proj_html="simple/${proj}/index.html"
+              fname=$(basename $url)
+              fname=(${fname//#/ }[0])
+              if [[ $(cat $proj_html | grep ">${fname}<") == "" ]]; then
+                  sed -i "/<\/body>/ i \    <a href=\"$url\">${fname}<\/a>" $proj_html
+              else
+                  sed -i "/>${fname}</ c \    <a href=\"$url\">${fname}<\/a>" $proj_html
+              fi
+          done;
+
+      - name: commit gh-page changes
+        run: |
+          cd simple
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "update project `${{ inputs.project }}`"
+          git push
+
+  deploy:
+    needs: add
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: gh-page
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: "."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
