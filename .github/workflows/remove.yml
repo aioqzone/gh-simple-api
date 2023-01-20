@@ -5,11 +5,10 @@ on:
     inputs: &inputs
       project:
         type: string
-        description: which project to add or update.
-      urls:
+        description: which project to remove files from.
+      files:
         type: string
-        description: asset urls, optional, default as empty string.
-        default: ""
+        description: files to remove.
       repo:
         type: string
         description: Index hosting repository, default as caller repository.
@@ -48,31 +47,15 @@ jobs:
       - name: update simple index
         env:
           proj: ${{ inputs.project }}
-          urls: ${{ inputs.urls }}
-          EMPTY_HTML: "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>"
+          files: ${{ inputs.files }}
         run: |
           cd ${{ env.idx-checkout-path }}
-          mkdir -p simple
 
-          if [ ! -f simple/index.html ]; then
-              echo -e ${EMPTY_HTML} > simple/index.html
-          fi
+          proj_html="simple/${proj}/index.html"
+          if [ ! -f $proj_html ]; then exit; fi
 
-          if [[ $(grep ">${proj}<" simple/index.html) == "" ]]; then
-              sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" simple/index.html
-              mkdir -p ${proj}
-              echo -e ${EMPTY_HTML} > simple/${proj}/index.html
-          fi
-
-          for url in $urls; do
-              proj_html="simple/${proj}/index.html"
-              fname=$(basename $url)
-              fname=(${fname//#/ }[0])
-              if [[ $(cat $proj_html | grep ">${fname}<") == "" ]]; then
-                  sed -i "/<\/body>/ i \    <a href=\"$url\">${fname}<\/a>" $proj_html
-              else
-                  sed -i "/>${fname}</ c \    <a href=\"$url\">${fname}<\/a>" $proj_html
-              fi
+          for file in $files; do
+              sed -i "/>${file}</ d" $proj_html
           done;
 
       - name: commit index changes
