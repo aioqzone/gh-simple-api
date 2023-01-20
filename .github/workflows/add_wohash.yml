@@ -15,9 +15,13 @@ on:
         required: false
         default: idx-pages
 
+permissions:
+  contents: write
+
 jobs:
   hash:
     runs-on: ubuntu-latest
+    permissions: {}
     env:
       urls: ${{ inputs.urls }}
     outputs:

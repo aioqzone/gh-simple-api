@@ -29,6 +29,9 @@ on:
         description: if you want to checkout a different repository
           that is private you will need to provide your own PAT.
 
+permissions:
+  contents: write
+
 jobs:
   add:
     runs-on: ubuntu-latest
@@ -52,23 +55,22 @@ jobs:
           urls: ${{ inputs.urls }}
         run: |
           cd ${{ env.idx-checkout-path }}
-          mkdir -p simple
 
-          if [ ! -f simple/index.html ]; then
-              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > simple/index.html
+          if [ ! -f index.html ]; then
+              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > index.html
           fi
 
           proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
           echo "::debug::project=${proj}"
 
-          if [[ $(grep ">${proj}<" simple/index.html) == "" ]]; then
-              sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" simple/index.html
-              mkdir -p simple/${proj}
-              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > simple/${proj}/index.html
+          if [[ $(grep ">${proj}<" index.html) == "" ]]; then
+              sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" index.html
+              mkdir -p ${proj}
+              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > ${proj}/index.html
           fi
 
           for url in $urls; do
-              proj_html="simple/${proj}/index.html"
+              proj_html="${proj}/index.html"
               fname=$(basename $url)
               fname=(${fname//#/ }[0])
               if [[ $(cat $proj_html | grep ">${fname}<") == "" ]]; then

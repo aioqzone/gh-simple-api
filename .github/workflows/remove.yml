@@ -19,6 +19,9 @@ on:
         required: false
         default: idx-pages
 
+permissions:
+  contents: write
+
 jobs:
   add:
     runs-on: ubuntu-latest
@@ -43,7 +46,7 @@ jobs:
           cd ${{ env.idx-checkout-path }}
 
           proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
-          proj_html="simple/${proj}/index.html"
+          proj_html="${proj}/index.html"
           if [ ! -f $proj_html ]; then exit; fi
 
           for file in $files; do
