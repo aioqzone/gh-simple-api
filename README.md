@@ -4,6 +4,12 @@ Implement [PEP 503][pep-0503] simple api with GitHub release and GitHub Page.
 
 ## Usage
 
+> **Note**
+> This is a template repository. You should create a new repository and push to it.
+>
+> Before running the actions, maybe you'll need to create a `gh-page` branch and
+> add your own landing page `index.html` to the root.
+
 ### release.yml
 
 `release.yml` will upload the given files to GitHub release of the given repository and return urls
