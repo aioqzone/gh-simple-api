@@ -7,7 +7,7 @@ Implement [PEP 503][pep-0503] simple api with GitHub release and GitHub Page.
 1. You should create your own repository and choose this repo as the template.
 2. Create an orphan `idx-pages` branch. It is used to save index htmls.
 3. Create a `gh-pages` branch as source of the index site. You can customize your site like other `JekyII` GitHub Pages.
-4. In repo settings, switch GitHub Page source to `GitHub Action`. GitHub Actions will write built index htmls into `/simple` dir after building your site from `gh-pages` source.
+4. In repo settings, switch GitHub Page source to `GitHub Action`. GitHub Actions will fetch built index htmls to `/simple` dir, then build your site from `gh-pages` source.
 
 ## Usage
 
