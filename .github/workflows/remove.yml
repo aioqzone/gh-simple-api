@@ -12,10 +12,10 @@ on:
         description: project name
       files:
         type: string
-        description: filenames
+        description: asset names
       index-branch:
         type: string
-        description: index htmls hosting branch
+        description: index branch
         required: false
         default: idx-pages
       rebuild:
@@ -69,4 +69,5 @@ jobs:
 
   rebuild:
     if: ${{ inputs.rebuild }}
+    needs: add
     uses: ./.github/workflows/publish.yml

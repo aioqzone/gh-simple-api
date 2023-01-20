@@ -2,10 +2,9 @@ name: Build Jekyll and Merge Index
 
 on:
   push:
-    branches: # modify this map if you use other names
-      - idx-pages
-      - gh-pages
+    branches: [gh-pages] # modify this list if you use other names
   workflow_dispatch:
+  workflow_call:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:

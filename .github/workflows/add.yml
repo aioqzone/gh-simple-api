@@ -9,10 +9,10 @@ on:
     inputs:
       project:
         type: string
-        description: which project to add or update.
+        description: project name
       urls:
         type: string
-        description: asset urls, optional, default as empty string.
+        description: asset urls
         default: ""
       repo:
         type: string
@@ -20,12 +20,12 @@ on:
         default: ${{ github.repository }}
       index-branch:
         type: string
-        description: Which branch to store the index htmls, default as `idx-pages`.
+        description: index branch
         required: false
         default: idx-pages
       rebuild:
         type: boolean
-        description: whether rebuild the site or not
+        description: rebuild pages
         required: false
         default: true
     secrets:
@@ -96,4 +96,5 @@ jobs:
 
   rebuild:
     if: ${{ inputs.rebuild }}
+    needs: add
     uses: ./.github/workflows/publish.yml
