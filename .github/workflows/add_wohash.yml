@@ -38,6 +38,7 @@ jobs:
                   wget --no-clobber $url > /dev/null
                   hash=$(sha256sum $(basename $url))
                   hash=(${hash// / }[0])
+                  echo "::debug::${url}#sha256=${hash}"
                   hash_urls="${hash_urls}${url}#sha256=${hash} "
               fi
           done

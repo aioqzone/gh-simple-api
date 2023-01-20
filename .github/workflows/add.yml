@@ -62,15 +62,14 @@ jobs:
 
           proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
           echo "::debug::project=${proj}"
+          proj_html="${proj}.html"
 
           if [[ $(grep ">${proj}<" index.html) == "" ]]; then
               sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" index.html
-              mkdir -p ${proj}
-              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > ${proj}/index.html
+              echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > $proj_html
           fi
 
           for url in $urls; do
-              proj_html="${proj}/index.html"
               fname=$(basename $url)
               fname=(${fname//#/ }[0])
               if [[ $(cat $proj_html | grep ">${fname}<") == "" ]]; then
