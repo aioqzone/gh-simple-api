@@ -1,8 +1,8 @@
 name: Add Assets to Index
 
 on:
-  workflow_call:
-    inputs: &inputs
+  workflow_dispatch:
+    inputs:
       project:
         type: string
         description: which project to remove files from.
@@ -18,14 +18,6 @@ on:
         description: Which branch to store the index htmls, default as `gh-page`.
         required: false
         default: gh-page
-    secrets:
-      REPO_TOKEN:
-        required: false
-        description: if you want to checkout a different repository
-          that is private you will need to provide your own PAT.
-
-  workflow_dispatch:
-    inputs: *inputs
 
 jobs:
   add:

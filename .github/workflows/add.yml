@@ -2,7 +2,7 @@ name: Add Assets to Index
 
 on:
   workflow_call:
-    inputs: &inputs
+    inputs:
       project:
         type: string
         description: which project to add or update.
@@ -24,9 +24,6 @@ on:
         required: false
         description: if you want to checkout a different repository
           that is private you will need to provide your own PAT.
-
-  workflow_dispatch:
-    inputs: *inputs
 
 jobs:
   add:
