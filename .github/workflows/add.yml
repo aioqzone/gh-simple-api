@@ -84,6 +84,3 @@ jobs:
           git add .
           git commit -m "update project `${{ inputs.project }}`"
           git push
-
-      - name: call deploy workflow
-        uses: .github/workflows/publish.yml
