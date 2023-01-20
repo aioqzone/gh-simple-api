@@ -5,7 +5,9 @@ Implement [PEP 503][pep-0503] simple api with GitHub release and GitHub Page.
 ## Setup
 
 1. You should create your own repository and choose this repo as the template.
-2. Setup GitHub Page in your repo settings. Feel free to choose a theme as your landing page.
+2. Create an orphan `idx-pages` branch. It is used to save index htmls.
+3. Create a `gh-pages` branch as source of the index site. You can customize your site like other `JekyII` GitHub Pages.
+4. In repo settings, switch GitHub Page source to `GitHub Action`. GitHub Actions will write built index htmls into `/simple` dir after building your site from `gh-pages` source.
 
 ## Usage
 
@@ -41,7 +43,7 @@ including a `SHA256` hash in their url fragments.
   - project: Which project to add or update.
   - urls: Assets urls. Should include a hash in url fragment. See [PEP 503][pep-0503].
   - repo: Index hosting repository, default as caller repository.
-  - index-branch: Your GitHub Page branch, default as `gh-page`.
+  - index-branch: Your GitHub Page branch, default as `idx-pages`.
 
 ``` yaml
 - uses: aioqzone/gh-simple-api/.github/workflows/add.yml@master
@@ -61,7 +63,7 @@ including a `SHA256` hash in their url fragments.
   - project: Which project to remove files from.
   - files: The files to remove.
   - repo: Index hosting repository, default as caller repository.
-  - index-branch: Your GitHub Page branch, default as `gh-page`.
+  - index-branch: Your GitHub Page branch, default as `idx-pages`.
 
 ``` yaml
 - uses: aioqzone/gh-simple-api/.github/workflows/remove.yml@master
