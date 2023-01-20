@@ -1,4 +1,4 @@
-name: Add Assets to Index
+name: Remove Assets from Index
 
 concurrency:
   group: index
@@ -13,10 +13,6 @@ on:
       files:
         type: string
         description: files to remove.
-      repo:
-        type: string
-        description: Index hosting repository, default as caller repository.
-        default: ${{ github.repository }}
       index-branch:
         type: string
         description: Which branch to store the index htmls, default as `idx-pages`.
@@ -35,7 +31,6 @@ jobs:
       - name: checkout index branch
         uses: actions/checkout@v3
         with:
-          repository: ${{ inputs.repo }}
           path: ${{ env.idx-checkout-path }}
           ref: ${{ inputs.index-branch }}
           token: ${{ secrets.REPO_TOKEN || github.token }}
