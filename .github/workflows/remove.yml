@@ -18,6 +18,11 @@ on:
         description: index htmls hosting branch
         required: false
         default: idx-pages
+      rebuild:
+        type: boolean
+        description: whether rebuild the site or not
+        required: false
+        default: true
 
 permissions:
   contents: write
@@ -56,8 +61,12 @@ jobs:
       - name: commit index changes
         run: |
           cd ${{ env.idx-checkout-path }}
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "update project `${{ inputs.project }}`"
+          git commit -m "remove assets \`${{ inputs.files }}\`"
           git push
+
+  rebuild:
+    if: ${{ inputs.rebuild }}
+    uses: ./.github/workflows/publish.yml

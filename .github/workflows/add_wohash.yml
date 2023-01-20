@@ -14,6 +14,11 @@ on:
         description: Which branch to store the index htmls, default as `idx-pages`.
         required: false
         default: idx-pages
+      rebuild:
+        type: boolean
+        description: whether rebuild the site or not
+        required: false
+        default: true
 
 permissions:
   contents: write
@@ -51,3 +56,4 @@ jobs:
       project: ${{ inputs.project }}
       urls: ${{ needs.hash.outputs.urls }}
       index-branch: ${{ inputs.index-branch }}
+      rebuild: ${{ inputs.rebuild }}

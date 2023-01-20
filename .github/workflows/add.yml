@@ -23,6 +23,11 @@ on:
         description: Which branch to store the index htmls, default as `idx-pages`.
         required: false
         default: idx-pages
+      rebuild:
+        type: boolean
+        description: whether rebuild the site or not
+        required: false
+        default: true
     secrets:
       REPO_TOKEN:
         required: false
@@ -62,10 +67,11 @@ jobs:
 
           proj=$(echo ${proj} | tr "\-_." "-" | tr -s "-" | tr "A-Z" "a-z")
           echo "::debug::project=${proj}"
-          proj_html="${proj}.html"
+          proj_html="${proj}/index.html"
 
           if [[ $(grep ">${proj}<" index.html) == "" ]]; then
-              sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" index.html
+              sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a><br>" index.html
+              mkdir -p ${proj}
               echo -e "<!DOCTYPE html>\n<html>\n  <body>\n  </body>\n</html>" > $proj_html
           fi
 
@@ -73,17 +79,21 @@ jobs:
               fname=$(basename $url)
               fname=(${fname//#/ }[0])
               if [[ $(cat $proj_html | grep ">${fname}<") == "" ]]; then
-                  sed -i "/<\/body>/ i \    <a href=\"$url\">${fname}<\/a>" $proj_html
+                  sed -i "/<\/body>/ i \    <a href=\"$url\">${fname}<\/a><br>" $proj_html
               else
-                  sed -i "/>${fname}</ c \    <a href=\"$url\">${fname}<\/a>" $proj_html
+                  sed -i "/>${fname}</ c \    <a href=\"$url\">${fname}<\/a><br>" $proj_html
               fi
           done;
 
       - name: commit index changes
         run: |
           cd ${{ env.idx-checkout-path }}
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "update project `${{ inputs.project }}`"
+          git commit -m "update project \`${{ inputs.project }}\`"
           git push
+
+  rebuild:
+    if: ${{ inputs.rebuild }}
+    uses: ./.github/workflows/publish.yml
