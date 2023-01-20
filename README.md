@@ -16,7 +16,7 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
 `release.yml` will upload the given files to GitHub release of the given repository and return urls
 including a `SHA256` hash in their url fragments.
 
-<detail>
+<details>
 
 <summary>Inputs, Outputs and Example</summary>
 
@@ -38,13 +38,13 @@ including a `SHA256` hash in their url fragments.
 - run: echo ${{ steps.upload.outputs.urls }}
 # https://github.com/aioqzone/project1/releases/download/project1/package1-0.1.0-cp3-none.whl#sha256=111111 https://github.com/aioqzone/project1/releases/download/project1/package1-0.1.0.tar.gz#sha256=2222222
 ```
-</detail>
+</details>
 
 ### add.yml
 
 `add.yml` will add urls and the corresponding files to the given project and deploy the index to GitHub Page.
 
-<detail>
+<details>
 
 <summary>Inputs, Outputs and Example</summary>
 
@@ -61,7 +61,7 @@ including a `SHA256` hash in their url fragments.
     urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
     repo: aioqzone/aioqzone-simple-index
 ```
-</detail>
+</details>
 
 ### remove.yml
 
@@ -69,7 +69,7 @@ including a `SHA256` hash in their url fragments.
 
 > **Note** This workflow should be triggered manually.
 
-<detail>
+<details>
 
 <summary>Inputs, Outputs and Example</summary>
 
@@ -87,7 +87,7 @@ including a `SHA256` hash in their url fragments.
     repo: aioqzone/aioqzone-simple-index
 ```
 
-</detail>
+</details>
 
 
 [pep-0503]: https://peps.python.org/pep-0503/
