@@ -59,7 +59,7 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
   with:
     project: project1
     urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
-    repo: aioqzone/aioqzone-simple-index
+    repo: aioqzone/aioqzone-index
 ```
 
 </details>
@@ -77,13 +77,11 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
 - Inputs:
   - project: Which project to remove files from.
   - files: The files to remove.
-  - repo: Index hosting repository, default as caller repository.
   - index-branch: Your GitHub Page branch, default as `idx-pages`.
 
 ``` yaml
 project: project1
 files: package1-0.1.0-cp3-none.whl package1-0.1.0.tar.gz
-repo: aioqzone/aioqzone-simple-index
 ```
 
 </details>
@@ -99,13 +97,11 @@ repo: aioqzone/aioqzone-simple-index
 - Inputs:
   - project: Which project to add or update.
   - urls: Assets urls. Needn't include a hash fragment (but is also allowed).
-  - repo: Index hosting repository, default as caller repository.
   - index-branch: Your GitHub Page branch, default as `idx-pages`.
 
 ``` yaml
 project: project1
 urls: https://example.com/package1-0.1.0-cp3-none.whl https://example.com/package1-0.1.0.tar.gz
-repo: aioqzone/aioqzone-simple-index
 ```
 
 </details>

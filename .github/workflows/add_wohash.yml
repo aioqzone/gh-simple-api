@@ -1,9 +1,5 @@
 name: Add Assets without Hash
 
-concurrency:
-  group: index
-  cancel-in-progress: false
-
 on:
   workflow_dispatch:
     inputs:
@@ -13,10 +9,6 @@ on:
       urls:
         type: string
         description: asset urls. if a url has not hash fragment, it should not contain "#".
-      repo:
-        type: string
-        description: Index hosting repository, default as caller repository.
-        default: ${{ github.repository }}
       index-branch:
         type: string
         description: Which branch to store the index htmls, default as `idx-pages`.
@@ -36,21 +28,21 @@ jobs:
         run: |
           hash_urls=""
           for url in $urls; do
-              if [ $url =~ # ]; then
+              if [[ $url =~ "#" ]]; then
                   hash_urls="${hash_urls}${urls} "
               else
-                  wget $url
+                  wget --no-clobber $url > /dev/null
                   hash=$(sha256sum $(basename $url))
                   hash=(${hash// / }[0])
-                  hash_urls="${hash_urls}${urls}#sha256=${hash} "
+                  hash_urls="${hash_urls}${url}#sha256=${hash} "
               fi
           done
           echo "urls=${hash_ruls}" >> $GITHUB_OUTPUT
 
   add:
     uses: ./.github/workflows/add.yml
+    needs: hash
     with:
       project: ${{ inputs.project }}
       urls: ${{ needs.hash.outputs.urls }}
-      repo: ${{ inputs.repo }}
       index-branch: ${{ inputs.index-branch }}

@@ -61,7 +61,7 @@ jobs:
 
           if [[ $(grep ">${proj}<" simple/index.html) == "" ]]; then
               sed -i "/<\/body>/ i \    <a href=\"${proj}\/\">${proj}<\/a>" simple/index.html
-              mkdir -p ${proj}
+              mkdir -p simple/${proj}
               echo -e ${EMPTY_HTML} > simple/${proj}/index.html
           fi
 
