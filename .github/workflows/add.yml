@@ -36,10 +36,14 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   add:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       idx-checkout-path: idx-pages
     steps:
