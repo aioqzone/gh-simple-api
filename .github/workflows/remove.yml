@@ -69,6 +69,7 @@ jobs:
     needs: add
     name: Republish Index Pages
     permissions:
+      contents: read
       pages: write
       id-token: write
     uses: aioqzone/gh-simple-api/.github/workflows/publish.yml@master
