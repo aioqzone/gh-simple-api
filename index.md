@@ -1,9 +1,7 @@
-# Welcome to gh-simple-api !
-
-This is the welcome page of [gh-simple-api][repo]. <!-- change this link -->
+# Welcome!
 
 To access simple api, goto [simple](./simple).
-For further information, goto our [repository][repo]. <!-- do not change this link -->
+For further information about `gh-simple-api`, goto our [repository][repo].
 
 ## Using simple index
 
@@ -21,7 +19,10 @@ default = false
 secondary = true
 ```
 
-Reference: https://python-poetry.org/docs/repositories/#simple-api-repository
+For more information, goto [poetry docs](https://python-poetry.org/docs/repositories/#simple-api-repository).
 
+### Pip
+
+...
 
 [repo]: https://github.com/aioqzone/gh-simple-api
