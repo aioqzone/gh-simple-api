@@ -63,6 +63,18 @@ project: project1
 urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
 ```
 
+Trigger `workflow_dispatch` in a workflow step:
+
+```yaml
+- name: publish to index
+  env:
+    GH_TOKEN: ${{ secrets.REPO_TOKEN }} # classical PAT. currently fine grained PAT is not supported by gh
+  run: |
+    gh workflow -R aioqzone/aioqzone-index run add.yml \
+                -f project=project1 \
+                -f urls="https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222"
+```
+
 </details>
 
 ---
