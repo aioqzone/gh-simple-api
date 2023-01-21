@@ -62,7 +62,7 @@ jobs:
     env:
       idx-checkout-path: idx-pages
     steps:
-      - uses: ./.github/actions/url-attach-hash@master
+      - uses: aioqzone/gh-simple-api/.github/actions/url-attach-hash@master
         id: hash
         with:
           files: ${{ inputs.files }}
@@ -122,4 +122,4 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    uses: ./.github/workflows/publish.yml
+    uses: aioqzone/gh-simple-api/.github/workflows/publish.yml@master

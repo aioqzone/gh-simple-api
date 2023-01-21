@@ -33,9 +33,6 @@ jobs:
     env:
       idx-checkout-path: index
     steps:
-      - name: checkout script branch
-        uses: actions/checkout@v3
-
       - name: checkout index branch
         uses: actions/checkout@v3
         with:
@@ -74,4 +71,4 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    uses: ./.github/workflows/publish.yml
+    uses: aioqzone/gh-simple-api/.github/workflows/publish.yml@master

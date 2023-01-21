@@ -23,7 +23,7 @@ runs:
       run: |
         hash_urls=""
 
-        if [ $files = "" ]; then
+        if [[ $files = "" ]]; then
             for url in $urls; do files="$files$(basename $url) "; done
         else
             files=$(ls $files)
@@ -33,7 +33,7 @@ runs:
             if [[ $url =~ "#" ]]; then continue; fi
 
             for file in $files; do
-                if [ $(basename $url) != $(basename $file) ]; then continue; fi
+                if [[ $(basename $url) != $(basename $file) ]]; then continue; fi
                 if [ ! -f $file ]; then wget -O "$file" "$url"; fi
                 if [ -f $file ]; then
                     hash=$(sha256sum $file)

@@ -43,7 +43,7 @@ runs:
         echo "urls=$urls" >> $GITHUB_OUTPUT
       shell: bash
 
-    - uses: .github/actions/url-attach-hash
+    - uses: ./.github/actions/url-attach-hash
       id: hash
       with:
         files: ${{ inputs.files }}
