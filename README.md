@@ -11,7 +11,35 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
 
 ## Usage
 
-### add.yml
+### Action `hash-release`
+
+`hash-release` will upload given files to GitHub Release. It outputs urls with `sha256` fragments.
+
+<details>
+
+<summary>Inputs, Outputs and Example</summary><br>
+
+- Inputs:
+  - tag: The release tag.
+  - files: The files to upload.
+  - repo: Upload to which repository, default as the caller repo.
+- Outputs:
+  - urls: urls point to uploaded files with hash attached to url fragments. Order is not guaranteed.
+
+Upload files under `dist/` to Release of current repository:
+
+```yaml
+- uses: aioqzone/gh-simple-api/.github/actions/hash-release@master
+  with:
+    tag: 0.1.0
+    files: dist/* # dist is ok as well
+```
+
+</details>
+
+---
+
+### Workflow `add.yml`
 
 `add.yml` will add urls and the corresponding files to the given project and deploy the index to GitHub Page.
 
@@ -24,7 +52,9 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
   - urls: Assets urls. Should include a hash in url fragment. See [PEP 503][pep-0503].
   - repo: Index hosting repository, default as caller repository.
   - index-branch: Your GitHub Page branch, default as `idx-pages`.
-  - rebuild: Whether to rebuild the pages after success.
+  - republish: Whether to republish the pages after success.
+
+Add two URLs to `project1` index hosted in `aioqzone/aioqzone-index@idx-pages`
 
 ``` yaml
 - uses: aioqzone/gh-simple-api/.github/workflows/add.yml@master
@@ -36,7 +66,9 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
 
 </details>
 
-### remove.yml
+---
+
+### Workflow `remove.yml`
 
 `remove.yml` will remove the files in the given project and deploy the index to GitHub Page.
 
@@ -50,7 +82,9 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
   - project: Which project to remove files from.
   - files: The files to remove.
   - index-branch: Your GitHub Page branch, default as `idx-pages`.
-  - rebuild: Whether to rebuild the pages after success.
+  - republish: Whether to republish the pages after success.
+
+Remove two files from `project1` hosted in `idx-branch` of this repository.
 
 ``` yaml
 project: project1
@@ -59,27 +93,5 @@ files: package1-0.1.0-cp3-none.whl package1-0.1.0.tar.gz
 
 </details>
 
-### add_wohash.yml
-
-`add_wohash.yml` is a wrapper of `add.yml`. It allows you to add asset urls without hash fragment manually. This workflow will fetch the assets and calculate their `sha256`.
-
-> **Note** This workflow should be triggered manually.
-
-<details>
-
-<summary>Inputs, Outputs and Example</summary><br>
-
-- Inputs:
-  - project: Which project to add or update.
-  - urls: Assets urls. Needn't include a hash fragment (but is also allowed).
-  - index-branch: Your GitHub Page branch, default as `idx-pages`.
-  - rebuild: Whether to rebuild the pages after success.
-
-``` yaml
-project: project1
-urls: https://example.com/package1-0.1.0-cp3-none.whl https://example.com/package1-0.1.0.tar.gz
-```
-
-</details>
 
 [pep-0503]: https://peps.python.org/pep-0503/

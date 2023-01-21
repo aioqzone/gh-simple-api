@@ -18,19 +18,15 @@ on:
         description: index branch
         required: false
         default: idx-pages
-      rebuild:
+      republish:
         type: boolean
-        description: whether rebuild the site or not
+        description: whether republish the site or not
         required: false
         default: true
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
   add:
+    name: Remove URLs from Index
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -71,7 +67,11 @@ jobs:
           git commit -m "remove assets \`${{ inputs.files }}\`"
           git push
 
-  rebuild:
-    if: ${{ inputs.rebuild }}
+  publish:
+    if: ${{ inputs.republish }}
     needs: add
+    name: Republish Index Pages
+    permissions:
+      pages: write
+      id-token: write
     uses: ./.github/workflows/publish.yml

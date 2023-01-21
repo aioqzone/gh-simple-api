@@ -23,9 +23,9 @@ on:
         description: index branch
         required: false
         default: idx-pages
-      rebuild:
+      republish:
         type: boolean
-        description: rebuild pages
+        description: republish pages
         required: false
         default: true
     secrets:
@@ -33,27 +33,44 @@ on:
         required: false
         description: if you want to checkout a different repository
           that is private you will need to provide your own PAT.
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+  workflow_dispatch:
+    inputs:
+      project:
+        type: string
+        description: project name
+      urls:
+        type: string
+        description: asset urls
+        default: ""
+      index-branch:
+        type: string
+        description: index branch
+        required: false
+        default: idx-pages
+      republish:
+        type: boolean
+        description: republish pages
+        required: false
+        default: true
 
 jobs:
   add:
+    name: Push URLs to Index
     runs-on: ubuntu-latest
     permissions:
       contents: write
     env:
       idx-checkout-path: idx-pages
     steps:
-      - name: checkout script branch
-        uses: actions/checkout@v3
+      - uses: ./.github/actions/url-attach-hash@master
+        id: hash
+        with:
+          files: ${{ inputs.files }}
 
       - name: checkout index branch
         uses: actions/checkout@v3
         with:
-          repository: ${{ inputs.repo }}
+          repository: ${{ inputs.repo || github.repository }}
           path: ${{ env.idx-checkout-path }}
           ref: ${{ inputs.index-branch }}
           token: ${{ secrets.REPO_TOKEN || github.token }}
@@ -61,7 +78,7 @@ jobs:
       - name: update simple index
         env:
           proj: ${{ inputs.project }}
-          urls: ${{ inputs.urls }}
+          urls: ${{ steps.hash.outputs.urls }}
         run: |
           cd ${{ env.idx-checkout-path }}
 
@@ -98,7 +115,11 @@ jobs:
           git commit -m "update project \`${{ inputs.project }}\`"
           git push
 
-  rebuild:
-    if: ${{ inputs.rebuild }}
+  publish:
+    if: ${{ inputs.republish }}
     needs: add
+    name: Republish Index Pages
+    permissions:
+      pages: write
+      id-token: write
     uses: ./.github/workflows/publish.yml

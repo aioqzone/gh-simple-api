@@ -1,0 +1,48 @@
+name: Attach Hash
+description: Attach hash fragment to urls as required in PEP 503
+inputs:
+  files:
+    description: file paths. leave empty to disable.
+    required: true
+    default: ""
+  urls:
+    description: urls. ignored if cannot fullmatch any filename.
+    required: true
+outputs:
+  urls:
+    description: urls with hash fragments attached
+    value: ${{ steps.hash.outputs.urls }}
+
+runs:
+  using: composite
+  steps:
+    - name: calculate hash
+      id: hash
+      env:
+        files: ${{ inputs.files }}
+      run: |
+        hash_urls=""
+
+        if [ $files = "" ]; then
+            for url in $urls; do files="$files$(basename $url) "; done
+        else
+            files=$(ls $files)
+        fi
+
+        for url in ${{ inputs.urls }}; do
+            if [[ $url =~ "#" ]]; then continue; fi
+
+            for file in $files; do
+                if [ $(basename $url) != $(basename $file) ]; then continue; fi
+                if [ ! -f $file ]; then wget -O "$file" "$url"; fi
+                if [ -f $file ]; then
+                    hash=$(sha256sum $file)
+                    hash=(${hash// / }[0])
+                    url="$url#sha256=$hash"
+                    echo $url
+                    hash_urls="$hash_urls$url "
+                fi
+            done
+        done
+        echo "urls=$hash_urls" >> $GITHUB_OUTPUT
+      shell: bash
