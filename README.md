@@ -7,7 +7,7 @@ Implement [PEP 503][pep-0503] simple api with GitHub Page.
 1. You should **create your own repository** and choose this repo as the template. Select **include all branches**, so that you'll get `master`, `idx-pages` and `gh-pages` branch.
 2. In repo's GitHub Page settings, switch GitHub Page source to `GitHub Action`.
 3. You can customize your site by editing `gh-pages` branch just like other `JekyII` GitHub Pages.
-4. Once you edit `idx-pages`(by calling the following workflows) or edit `gh-pages`, our build workflow will fetch built index htmls to `/simple` dir, then build your site from `gh-pages` source.
+4. Once you edit `idx-pages`(by dispatching the following workflows) or edit `gh-pages`, our build workflow will fetch built index htmls to `/simple` dir, then build your site from `gh-pages` source.
 
 ## Usage
 
@@ -43,6 +43,8 @@ Upload files under `dist/` to Release of current repository:
 
 `add.yml` will add urls and the corresponding files to the given project and deploy the index to GitHub Page.
 
+> **Note** This workflow should be triggered by `workflow_dispatch`.
+
 <details>
 
 <summary>Inputs, Outputs and Example</summary><br>
@@ -57,11 +59,8 @@ Upload files under `dist/` to Release of current repository:
 Add two URLs to `project1` index hosted in `aioqzone/aioqzone-index@idx-pages`
 
 ``` yaml
-- uses: aioqzone/gh-simple-api/.github/workflows/add.yml@master
-  with:
-    project: project1
-    urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
-    repo: aioqzone/aioqzone-index
+project: project1
+urls: https://example.com/package1-0.1.0-cp3-none.whl#sha256=111111 https://example.com/package1-0.1.0.tar.gz#sha256=2222222
 ```
 
 </details>
@@ -72,7 +71,7 @@ Add two URLs to `project1` index hosted in `aioqzone/aioqzone-index@idx-pages`
 
 `remove.yml` will remove the files in the given project and deploy the index to GitHub Page.
 
-> **Note** This workflow should be triggered manually.
+> **Note** This workflow should be triggered by `workflow_dispatch`.
 
 <details>
 

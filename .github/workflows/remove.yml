@@ -38,7 +38,6 @@ jobs:
         with:
           path: ${{ env.idx-checkout-path }}
           ref: ${{ inputs.index-branch }}
-          token: ${{ secrets.REPO_TOKEN || github.token }}
 
       - name: update simple index
         env:

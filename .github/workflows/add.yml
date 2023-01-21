@@ -5,34 +5,6 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  workflow_call:
-    inputs:
-      project:
-        type: string
-        description: project name
-      urls:
-        type: string
-        description: asset urls
-        default: ""
-      repo:
-        type: string
-        description: Index hosting repository, default as caller repository.
-        default: ${{ github.repository }}
-      index-branch:
-        type: string
-        description: index branch
-        required: false
-        default: idx-pages
-      republish:
-        type: boolean
-        description: republish pages
-        required: false
-        default: true
-    secrets:
-      REPO_TOKEN:
-        required: false
-        description: if you want to checkout a different repository
-          that is private you will need to provide your own PAT.
   workflow_dispatch:
     inputs:
       project:
@@ -65,10 +37,8 @@ jobs:
       - name: checkout index branch
         uses: actions/checkout@v3
         with:
-          repository: ${{ inputs.repo || github.repository }}
           path: ${{ env.idx-checkout-path }}
           ref: ${{ inputs.index-branch }}
-          token: ${{ secrets.REPO_TOKEN || github.token }}
 
       - name: update simple index
         env:
