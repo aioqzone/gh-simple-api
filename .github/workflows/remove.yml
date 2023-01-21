@@ -43,7 +43,6 @@ jobs:
       - name: update simple index
         env:
           proj: ${{ inputs.project }}
-          files: ${{ inputs.files }}
         run: |
           cd ${{ env.idx-checkout-path }}
 
@@ -51,7 +50,7 @@ jobs:
           proj_html="${proj}/index.html"
           if [ ! -f $proj_html ]; then exit; fi
 
-          for file in $files; do
+          for file in ${{ inputs.files }}; do
               sed -i "/>${file}</ d" $proj_html
           done;
 

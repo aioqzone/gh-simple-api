@@ -32,7 +32,7 @@ Upload files under `dist/` to Release of current repository:
 - uses: aioqzone/gh-simple-api/.github/actions/hash-release@master
   with:
     tag: 0.1.0
-    files: dist/* # dist is ok as well
+    files: dist/* # `dist` is not guaranteed to work!
 ```
 
 </details>
