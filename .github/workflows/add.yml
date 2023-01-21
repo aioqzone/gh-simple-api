@@ -62,11 +62,6 @@ jobs:
     env:
       idx-checkout-path: idx-pages
     steps:
-      - uses: JamzumSum/actions/url-attach-hash@master
-        id: hash
-        with:
-          files: ${{ inputs.files }}
-
       - name: checkout index branch
         uses: actions/checkout@v3
         with:
@@ -78,7 +73,7 @@ jobs:
       - name: update simple index
         env:
           proj: ${{ inputs.project }}
-          urls: ${{ steps.hash.outputs.urls }}
+          urls: ${{ inputs.urls }}
         run: |
           cd ${{ env.idx-checkout-path }}
 
