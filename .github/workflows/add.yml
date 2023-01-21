@@ -62,7 +62,7 @@ jobs:
     env:
       idx-checkout-path: idx-pages
     steps:
-      - uses: aioqzone/gh-simple-api/.github/actions/url-attach-hash@master
+      - uses: JamzumSum/actions/url-attach-hash@master
         id: hash
         with:
           files: ${{ inputs.files }}
