@@ -40,7 +40,7 @@ jobs:
       - name: remove git info
         run: rm -rf ./_site/simple/.git > /dev/null || exit 0
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
 
   # Deployment job
   deploy:
